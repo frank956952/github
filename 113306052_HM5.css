@@ -1,0 +1,165 @@
+body{
+    background-color: #eeede1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.main-container{
+    width: 990px;
+    display: flex;
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    height: 1200px;
+}
+.left-panel{
+    color: white;
+    width: 450px;
+    height: 1238px;
+}
+.text-content a{
+    color : white;
+}
+
+.right-panel{
+    width: 540px;
+    height: 1200px;
+}
+.photo-panel{
+    height: 50%; 
+    background-image: url('personal photo big.jpg'); 
+    background-size: cover;
+    background-position: center; 
+}
+.text-content{
+    height: 50%; 
+    background-color: #413e3e;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font color: white ;
+}
+.text-content h2,p,a{
+    display: flex;
+    margin-left: 10px;
+}
+h1, h2 {
+
+  margin: 0;
+  padding-bottom: 10px;
+  font-weight: bold;
+}
+h1 {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    font-size: 50px;
+
+}
+h2 {
+    display: flex;
+    font-size: 25px;
+ 
+}
+a,p {
+    padding: 15px;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+
+.nccu-icon {
+  margin-top: 0%; 
+  margin-bottom: 5%;
+  width: 350px;
+}
+
+
+.right-panel {
+    width: 540px; 
+    background-color: #f0f0f0;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+.right-panel h2 {   
+    font-size: 30px;
+    border-bottom: 2px solid #ccc; 
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.education-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    font-size: 20px;
+}
+
+.year {
+    font-weight: bold;
+    width: 80px;
+}
+
+.description {
+    margin-left: 10px;
+}
+
+.homework-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.homework-section li {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 20px;
+}
+
+.homework-section a {
+    text-decoration: none;
+    color: #333; 
+}
+
+.homework-section a:hover {
+    color: #007BFF; 
+}
+
+.music-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    font-size: 20px;
+}
+.music-name{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 10px;
+}
+.music-list img {
+    width: 70px; 
+    height: 70px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+.music-list p{
+    font-size: 10px;
+}
+
+.note {
+    font-size: 12px;
+    color: #666;
+    margin-top: 0px;
+    line-height: 1.4;
+}
+
+.HW{
+    font-weight: bold;
+}
