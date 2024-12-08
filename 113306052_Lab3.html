@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+
+	<h1>113306052_Lab3_Number Guessing Game</h1>
+	<div class="correct" style="display: none;"><img src="correct.jpg"></div>
+  	<div class="wrong" style="display: none;"><img src="wrong.jpg"></div>
+	 <script>
+	 		var answer =  Math.floor(Math.random() * 98) + 2;
+	 		var times = 7;
+	 		var upbound = 100;
+	 		var lowbound = 1;
+
+			
+			
+				var guess = window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" );
+			
+			
+	 			while(times > 0){
+	 			
+					if (isNaN(guess) || guess <= lowbound || guess >= upbound) {
+                		alert("請輸入有效範圍內的數字! (不能選擇範圍的上下限)");
+                		guess = window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" );
+                		continue;
+            			}
+	 				if(guess > answer ){
+	 					upbound = guess;
+	 					times--;
+	 					if(times != 0){
+	 						guess = window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" );
+	 						
+	 					}else{
+	 						alert("次數已用完 答案是" + answer );
+	 						  document.getElementsByClassName("wrong")[0].style.display = "block";
+	 					}
+	 					
+	 				}else if(guess < answer){
+	 					lowbound = guess;
+	 					times--;
+						if(times != 0){
+	 						guess = window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" );
+
+	 					}else{
+	 						alert("次數已用完 答案是" + answer );
+	 						  document.getElementsByClassName("wrong")[0].style.display = "block";
+	 					}
+
+	 				}else if(guess == answer){
+	 					alert("恭喜你答對了 !" );
+	 					document.getElementsByClassName("correct")[0].style.display = "block";
+	 					break;
+
+	 				}
+				}
+			
+	 </script>	
+</body>
+</html>
