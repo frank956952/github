@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+	<style>
+		
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f9;
+			color: #333;
+			text-align: center;
+			margin: 0;
+			padding: 0;
+		}
+		h1 {
+			color: #0077cc;
+			margin: 20px 0;
+		}
+		h2 {
+			color: #555;
+			margin-top: 30px;
+		}
+		
+		#guess {
+			padding: 10px;
+			font-size: 16px;
+			border: 2px solid #0077cc;
+			border-radius: 5px;
+			width: 200px;
+			margin: 10px 5px 10px 0;
+		}
+		#guess:focus {
+			outline: none;
+			border-color: #005fa3;
+			box-shadow: 0 0 5px rgba(0, 119, 204, 0.5);
+		}
+		button {
+			padding: 10px 15px;
+			font-size: 16px;
+			color: white;
+			background-color: #0077cc;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		button:hover {
+			background-color: #005fa3;
+		}
+		button:active {
+			background-color: #004080;
+		}
+		
+		#gameLog {
+			margin-top: 20px;
+			padding: 20px;
+			width: 80%;
+			max-width: 600px;
+			background-color: white;
+			border: 1px solid #ccc;
+			border-radius: 10px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			margin-left: auto;
+			margin-right: auto;
+			overflow-y: auto;
+			max-height: 300px;
+		}
+		
+		#gameLog p {
+			margin: 10px 0;
+			font-size: 18px;
+			text-align: center; 
+			line-height: 1.5;
+		}
+	</style>
+	<h1>113306052_HW6_1A2B</h1>
+	<input id="guess" type="text" placeholder="請輸入四個不重複的數字"> <button id="guessButton" onclick="myFunction()">猜!</button>
+	</br>
+	<h2>遊戲紀錄</h2>
+	<div id="gameLog"></div>
+	<script>
+		let numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+		const answer = [];
+		let times = 0;
+
+		while (answer.length < 4) {
+    	let index = Math.floor(Math.random() * numbers.length);
+		answer.push(numbers[index]);
+		numbers.splice(index, 1);
+		} 
+		//生成隨機答案並放入陣列answer[]
+
+		function hasDuplicates(input) {
+    	let digitsArray = input.split(""); 
+    	for (let i = 0; i < digitsArray.length; i++) {
+        	for (let j = i + 1; j < digitsArray.length; j++) {
+            	if (digitsArray[i] === digitsArray[j]) {
+                	return true; 
+            	}
+        	}
+    	}
+    	return false; 
+		}
+		//判斷input是否有重複數字
+
+		function myFunction() {
+			let A = 0;
+			let B = 0;
+			let flag;
+  			let input = document.getElementById("guess").value;
+			let digitsArray = [];
+			for (let i = 0; i < input.length; i++) {
+    			digitsArray.push(parseInt(input[i]));
+			}
+			//分割input放入陣列
+
+			if (input.length !== 4 || hasDuplicates(input)) {
+					alert("輸入有誤");
+					document.getElementById("guess").value = "";
+					flag = false;
+			}else{
+				flag = true;
+				times++;
+			}
+			//檢查輸入
+
+			for(let i = 0; i < 4; i++) {
+				if(digitsArray[i] === answer[i]){
+					A++;
+				}else if(digitsArray.includes(answer[i])){
+					B++;
+				}		
+			}
+
+			if(flag){
+					document.getElementById("gameLog").innerHTML +="第" + times + "次: " + input + " ⮕ " + A + "A" + B + "B<br>";
+					document.getElementById("guess").value = "";
+			}
+		}
+		//猜!function
+
+			document.getElementById("guess").addEventListener("keydown", function(event) {
+					if (event.key === "Enter") {
+						document.getElementById("guessButton").click();
+					}
+				});
+
+				//Enter 可以輸入
+		
+	</script>
+</body>
+</html>
