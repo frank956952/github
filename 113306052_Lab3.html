@@ -18,21 +18,21 @@
 
 			
 			
-				var guess = window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" );
+				var guess = parseInt(window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" ));
 			
 			
 	 			while(times > 0){
 	 			
 					if (isNaN(guess) || guess <= lowbound || guess >= upbound) {
                 		alert("請輸入有效範圍內的數字! (不能選擇範圍的上下限)");
-                		guess = window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" );
+                		guess = parseInt(window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" ));
                 		continue;
             			}
 	 				if(guess > answer ){
 	 					upbound = guess;
 	 					times--;
 	 					if(times != 0){
-	 						guess = window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" );
+	 						guess = parseInt(window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" ));
 	 						
 	 					}else{
 	 						alert("次數已用完 答案是" + answer );
@@ -43,7 +43,7 @@
 	 					lowbound = guess;
 	 					times--;
 						if(times != 0){
-	 						guess = window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" );
+	 						guess = parseInt(window.prompt("請輸入"+ lowbound +"~"+ upbound + "之間的數字" +"還剩下"+ times +"次機會" ));
 
 	 					}else{
 	 						alert("次數已用完 答案是" + answer );
