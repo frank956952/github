@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>My Page</title>
+	<style>
+		/* General Styling */
+		body {
+			background-color: #eeede1;
+			display: flex;
+			justify-content: center;
+			align-items: flex-start; /* Ensure content starts at the top */
+			padding: 20px;
+			min-height: 100vh;
+			overflow-x: hidden;
+			margin: 0;
+		}
+
+		.main-container {
+			width: 990px;
+			display: flex; /* Flexbox to align left and right panels */
+			background-color: #f9f9f9;
+			box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+			min-height: 100vh; /* Ensures container spans at least the viewport height */
+			height: auto; /* Allows dynamic adjustment */
+		}
+
+		/* Left Panel Styling */
+		.left-panel {
+			flex: 1; /* Flex-grow to share available space */
+			display: flex;
+			flex-direction: column;
+			background-color: #413e3e; /* Ensure consistent background color */
+			color: white;
+		}
+
+		.photo-panel {
+			height: 50%; 
+			background-image: url('personal photo big.jpg');
+			background-size: cover;
+			background-position: center;
+		}
+
+		.text-content {
+			flex: 1; /* Fill remaining space of the left panel */
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			padding: 20px;
+		}
+
+		.text-content h2, p, a {
+			margin: 10px 0;
+		}
+
+		/* Right Panel Styling */
+		.right-panel {
+			flex: 1; /* Flex-grow to share available space */
+			background-color: #f0f0f0;
+			padding: 20px;
+			box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		/* Education Section */
+		.education-content {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			padding: 10px;
+			font-size: 20px;
+		}
+
+		.year {
+			font-weight: bold;
+			width: 80px;
+		}
+
+		.description {
+			margin-left: 10px;
+		}
+
+		/* Music Section */
+		.music-list {
+			display: flex;
+			flex-wrap: wrap; /* Allow items to wrap to new lines */
+			gap: 20px;
+			padding: 10px;
+		}
+
+		.music-list a {
+			display: inline-block;
+			text-align: center;
+			text-decoration: none;
+			color: inherit;
+			margin: 10px;
+			width: 80px;
+		}
+
+		.music-list img {
+			width: 70px; 
+			height: 70px;
+			object-fit: cover;
+			border-radius: 10px;
+		}
+
+		.music-list p {
+			margin-top: 5px;
+			font-size: 14px;
+			text-align: center;
+		}
+
+		/* Form Styling */
+		#form-container {
+			width: 100%;
+			max-width: 400px;
+			margin: 0 auto;
+			background-color: #f4f4f9;
+			padding: 20px;
+			border: 1px solid #ccc;
+			border-radius: 10px;
+			box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+		}
+		#form-container label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		#form-container input {
+			width: 100%;
+			padding: 8px;
+			margin-bottom: 10px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+		}
+		#form-container button {
+			background-color: #007BFF;
+			color: white;
+			border: none;
+			padding: 10px 15px;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+		#form-container button:hover {
+			background-color: #0056b3;
+		}
+	</style>
+</head>
+<body>
+	<div class="main-container">
+		<!-- Left Panel -->
+		<div class="left-panel">
+			<div class="photo-panel"></div>
+			<div class="text-content">
+				<h1 id="nameDisplay">Frank</h1>
+        		<input type="text" id="nameInput" style="display: none;" />
+        		<button id="toggleButton">edit</button>
+				<h2>About me</h2>
+				<p>
+					I am a freshman in the Department of Management Information Systems at National Chengchi University. I am very interested in studying programming and computer science fundamentals. I have experience in writing Java, HTML, CSS, JavaScript, and Python.
+				</p>
+				<h2>CONTACT</h2>
+				<a href="mailto:113306052@g.nccu.edu.tw">113306052@g.nccu.edu.tw</a>
+				<img src="logo.png" alt="NCCU Icon" class="nccu-icon">
+			</div>
+		</div>
+
+		<!-- Right Panel -->
+		<div class="right-panel">
+			<section class="education-section">
+				<h2>Education</h2>
+				<div class="education-content">
+					<div class="year">2023-now</div>
+					<div class="description">National Chengchi University, Department of MIS Computer Science</div>
+					<div class="year">2021-2023</div>
+					<div class="description">Taoyuan Wuling High School Participated in computer science club</div>
+					<div class="year">2018-2021</div>
+					<div class="description">Middle School Graduation Started developing interest in computer science</div>
+				</div>
+			</section>
+			<section class="homework-section">
+				<h2>Homework List</h2>
+				<ul>
+					<li><div class="HW">HW1 - </div>
+						<a href="https://frank956952.github.io/github/113306052_HW4.html" target="_blank">https://frank956952.github.io/github/113306052_HW4.html</a>
+					</li>
+					<li><div class="HW">HW2 - </div>
+						<a href="https://frank956952.github.io/github/113306052_Lab.html" target="_blank">https://frank956952.github.io/github/113306052_Lab.html</a>
+					</li>
+					<li><div class="HW">HW3 - </div>
+						<a href="https://frank956952.github.io/github/113306052_HW4.html" target="_blank">https://frank956952.github.io/github/113306052_HW4.html</a>
+					</li>
+				</ul>
+			</section>
+			<section class="music-section">
+				<h2>Favorite Music</h2>
+				<div class="music-list" id="music-container">
+					<a href="https://www.youtube.com/watch?v=FT0GKCuSaW0" target="_blank">
+						<img src="spotify.png" alt="Album 1">
+						<p>裸の勇者 / Vaundy</p>
+					</a>
+					<a href="https://youtu.be/NTpbbQUBbuo" target="_blank">
+						<img src="spotify.png" alt="Album 2">
+						<p>Hozier - Too Sweet</p>
+					</a>
+					<a href="https://www.youtube.com/watch?v=msGQOO6f3h0" target="_blank">
+						<img src="spotify.png" alt="Album 3">
+						<p>DAN DA DAN | Otonoke</p>
+					</a>
+					<a href="https://youtu.be/kPa7bsKwL-c" target="_blank">
+						<img src="spotify.png" alt="Album 4">
+						<p>Die With A Smile</p>
+					</a>
+				</div>
+				<button id="add-button">add</button>
+				<div id="form-container" style="display: none;">
+					<label>Music Link: 
+						<input type="url" id="music-link" placeholder="https://">
+					</label>
+					<label>Music Name: 
+						<input type="text" id="music-name" placeholder="Music Name">
+					</label>
+					<button id="submit-button">Submit</button>
+				</div>
+				<p class="note">These songs are my favorites because they remind me of happy moments and motivate me.</p>
+			</section>
+		</div>
+	</div>
+</body>
+	<script>
+		let isEditing = false; // 布林變數追蹤當前狀態
+
+        const nameDisplay = document.getElementById("nameDisplay");
+        const nameInput = document.getElementById("nameInput");
+        const toggleButton = document.getElementById("toggleButton");
+
+        toggleButton.addEventListener("click", function() {
+            if (isEditing) {
+                // 當前是 "save" 狀態：保存輸入框的內容
+                nameDisplay.textContent = nameInput.value;
+                nameDisplay.style.display = "inline";
+                nameInput.style.display = "none";
+                toggleButton.textContent = "edit";
+            } else {
+                // 當前是 "edit" 狀態：進入編輯模式
+                nameInput.value = nameDisplay.textContent;
+                nameDisplay.style.display = "none";
+                nameInput.style.display = "inline";
+                toggleButton.textContent = "save";
+            }
+            isEditing = !isEditing; // 切換狀態
+        });
+
+        const addButton = document.getElementById('add-button');
+        const formContainer = document.getElementById('form-container');
+        const submitButton = document.getElementById('submit-button');
+        const musicContainer = document.getElementById('music-container');
+        const musicLinkInput = document.getElementById('music-link');
+        const musicNameInput = document.getElementById('music-name');
+
+        let formVisible = false;
+
+        // Show/hide form when "add" button is clicked
+        addButton.addEventListener('click', () => {
+            formVisible = !formVisible;
+            formContainer.style.display = formVisible ? 'block' : 'none';
+        });
+
+        // Submit form and add new music item
+        submitButton.addEventListener('click', () => {
+            const link = musicLinkInput.value.trim();
+            const name = musicNameInput.value.trim();
+
+            if (link && name) {
+                // Create new music item
+                const musicItem = document.createElement('div');
+                musicItem.classList.add('music-item');
+
+                const musicLink = document.createElement('a');
+                musicLink.href = link;
+                musicLink.target = "_blank";
+
+                const musicImage = document.createElement('img');
+                musicImage.src = "spotify.png"; // Music icon
+                musicImage.alt = name;
+
+                const musicName = document.createElement('span');
+                musicName.textContent = name;
+
+                musicLink.appendChild(musicImage);
+                musicItem.appendChild(musicLink);
+                musicItem.appendChild(musicName);
+
+                // Add to music container
+                musicContainer.appendChild(musicItem);
+
+                // Clear and hide the form
+                musicLinkInput.value = '';
+                musicNameInput.value = '';
+                formContainer.style.display = 'none';
+                formVisible = false;
+            } else {
+                alert('Please complete both fields before submitting.');
+            }
+        });
+	</script>
+	
+</body>
+</html>
