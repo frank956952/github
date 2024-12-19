@@ -5,12 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>My Page</title>
 	<style>
-		/* General Styling */
+		
 		body {
 			background-color: #eeede1;
 			display: flex;
 			justify-content: center;
-			align-items: flex-start; /* Ensure content starts at the top */
+			align-items: flex-start; 
 			padding: 20px;
 			min-height: 100vh;
 			overflow-x: hidden;
@@ -19,19 +19,19 @@
 
 		.main-container {
 			width: 990px;
-			display: flex; /* Flexbox to align left and right panels */
+			display: flex; 
 			background-color: #f9f9f9;
 			box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-			min-height: 100vh; /* Ensures container spans at least the viewport height */
-			height: auto; /* Allows dynamic adjustment */
+			min-height: 100vh; 
+			height: auto; 
 		}
 
-		/* Left Panel Styling */
+		
 		.left-panel {
-			flex: 1; /* Flex-grow to share available space */
+			flex: 1; 
 			display: flex;
 			flex-direction: column;
-			background-color: #413e3e; /* Ensure consistent background color */
+			background-color: #413e3e;
 			color: white;
 		}
 
@@ -43,7 +43,7 @@
 		}
 
 		.text-content {
-			flex: 1; /* Fill remaining space of the left panel */
+			flex: 1; 
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
@@ -54,15 +54,15 @@
 			margin: 10px 0;
 		}
 
-		/* Right Panel Styling */
+		
 		.right-panel {
-			flex: 1; /* Flex-grow to share available space */
+			flex: 1; 
 			background-color: #f0f0f0;
 			padding: 20px;
 			box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 		}
 
-		/* Education Section */
+		
 		.education-content {
 			display: flex;
 			flex-direction: column;
@@ -80,10 +80,10 @@
 			margin-left: 10px;
 		}
 
-		/* Music Section */
+		
 		.music-list {
 			display: flex;
-			flex-wrap: wrap; /* Allow items to wrap to new lines */
+			flex-wrap: wrap; 
 			gap: 20px;
 			padding: 10px;
 		}
@@ -110,7 +110,7 @@
 			text-align: center;
 		}
 
-		/* Form Styling */
+		
 		#form-container {
 			width: 100%;
 			max-width: 400px;
@@ -148,7 +148,7 @@
 </head>
 <body>
 	<div class="main-container">
-		<!-- Left Panel -->
+		
 		<div class="left-panel">
 			<div class="photo-panel"></div>
 			<div class="text-content">
@@ -165,7 +165,7 @@
 			</div>
 		</div>
 
-		<!-- Right Panel -->
+		
 		<div class="right-panel">
 			<section class="education-section">
 				<h2>Education</h2>
@@ -228,7 +228,7 @@
 	</div>
 </body>
 	<script>
-		let isEditing = false; // 布林變數追蹤當前狀態
+		let isEditing = false; 
 
         const nameDisplay = document.getElementById("nameDisplay");
         const nameInput = document.getElementById("nameInput");
@@ -236,19 +236,19 @@
 
         toggleButton.addEventListener("click", function() {
             if (isEditing) {
-                // 當前是 "save" 狀態：保存輸入框的內容
+                
                 nameDisplay.textContent = nameInput.value;
                 nameDisplay.style.display = "inline";
                 nameInput.style.display = "none";
                 toggleButton.textContent = "edit";
             } else {
-                // 當前是 "edit" 狀態：進入編輯模式
+                
                 nameInput.value = nameDisplay.textContent;
                 nameDisplay.style.display = "none";
                 nameInput.style.display = "inline";
                 toggleButton.textContent = "save";
             }
-            isEditing = !isEditing; // 切換狀態
+            isEditing = !isEditing; 
         });
 
         const addButton = document.getElementById('add-button');
@@ -260,19 +260,19 @@
 
         let formVisible = false;
 
-        // Show/hide form when "add" button is clicked
+       
         addButton.addEventListener('click', () => {
             formVisible = !formVisible;
             formContainer.style.display = formVisible ? 'block' : 'none';
         });
 
-        // Submit form and add new music item
+        
         submitButton.addEventListener('click', () => {
             const link = musicLinkInput.value.trim();
             const name = musicNameInput.value.trim();
 
             if (link && name) {
-                // Create new music item
+                
                 const musicItem = document.createElement('div');
                 musicItem.classList.add('music-item');
 
@@ -281,7 +281,7 @@
                 musicLink.target = "_blank";
 
                 const musicImage = document.createElement('img');
-                musicImage.src = "spotify.png"; // Music icon
+                musicImage.src = "spotify.png"; 
                 musicImage.alt = name;
 
                 const musicName = document.createElement('span');
@@ -291,10 +291,10 @@
                 musicItem.appendChild(musicLink);
                 musicItem.appendChild(musicName);
 
-                // Add to music container
+              
                 musicContainer.appendChild(musicItem);
 
-                // Clear and hide the form
+                
                 musicLinkInput.value = '';
                 musicNameInput.value = '';
                 formContainer.style.display = 'none';
