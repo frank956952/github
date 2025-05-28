@@ -96,6 +96,49 @@
     <footer>
         <p>© 2025 GreenQuest 團隊</p>
     </footer>
+<h2 style="text-align:center;">📍 我在這裡做了永續行為！</h2>
+<div id="map" style="height: 500px; width: 100%; margin-bottom: 50px;"></div>
+
+<script>
+let map;
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 23.5, lng: 121 }, // Taiwan 中心
+        zoom: 7,
+    });
+
+    map.addListener("click", (e) => {
+        const lat = e.latLng.lat();
+        const lng = e.latLng.lng();
+
+        const action = prompt("你在這裡做了什麼永續行為？（例如：回收、搭捷運、種樹）");
+
+        if (action) {
+            const marker = new google.maps.Marker({
+                position: { lat, lng },
+                map,
+            });
+
+            const infoWindow = new google.maps.InfoWindow({
+                content: `<p><strong>永續行為：</strong>${action}</p>`,
+            });
+
+            marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+            });
+        }
+    });
+}
+</script>
+
+<!-- 替換 YOUR_API_KEY 為你的 Google Maps 金鑰 -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZLwwPsrG4Y34F7mUovekTHr9NDkjyNvo&callback=initMap">
+</script>
+
+
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
