@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>GreenQuest 永續任務平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f8f5;
+            color: #333;
+        }
+        header {
+            background: #006644;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 10px;
+            color: white;
+            text-decoration: none;
+        }
+        .hero {
+            text-align: center;
+            padding: 3em 1em;
+            background: #c7efd0;
+        }
+        .cta {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #009966;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        footer {
+            background: #004422;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        .main-content {
+            text-align: center;
+            padding: 2em;
+        }
+        .task-list button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #00aa88;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .task-list button:hover {
+            background-color: #007755;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>GreenQuest 永續任務平台</h1>
+        <nav>
+            <a href="#">首頁</a>
+            <a href="#about">理念</a>
+            <a href="#features">功能</a>
+            <a href="#business">企業合作</a>
+            <a href="#team">團隊介紹</a>
+            <a href="#contact">聯絡我們</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>你做的每個永續行為，都是改變世界的一步</h2>
+            <a href="#features" class="cta">開始你的任務之旅</a>
+        </section>
+
+        <section id="features" class="main-content">
+            <h2>平台功能（互動模擬）</h2>
+            <p>選擇一項任務並點擊完成，獲得綠點數：</p>
+            <div class="task-list">
+                <button data-points="10">♻️ 回收寶特瓶</button>
+                <button data-points="15">🚌 搭乘大眾運輸</button>
+                <button data-points="20">🌿 種植一株植物</button>
+            </div>
+            <p id="point-display">你目前的綠點數：0 分</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 GreenQuest 團隊</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let points = 0;
+            const display = document.getElementById("point-display");
+            const buttons = document.querySelectorAll(".task-list button");
+
+            buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const taskPoints = parseInt(button.getAttribute("data-points"));
+                    points += taskPoints;
+                    display.textContent = "你目前的綠點數：" + points + " 分";
+                });
+            });
+        });
+    </script>
+</body>
+</html>
