@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動式電動車補助政策分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony Neutrals -->
+    <!-- Application Structure Plan: The application is designed as a single-page dashboard with six main interactive sections: "介紹" (Introduction), "理論核心" (Core Theory), "政策透視" (Policy Deep Dive), "國際比較" (International Comparison), "效益評估" (Effectiveness Evaluation), and "引用文獻" (References). This non-linear, thematic structure was chosen over a linear report format to empower users to explore content based on their interests. The flow is: User lands on a welcoming introduction, uses a clear top navigation to switch between sections. Each section uses interactive elements (dynamic charts, clickable cards, toggles) to make complex information digestible. This design prioritizes user engagement and understanding by transforming passive reading into an active exploration of economic concepts and policy data. The "引用文獻" section now contains user-provided reference links. -->
+    <!-- Visualization & Content Choices: 
+        1. Economic Theory: Report describes market failure and subsidy effects. Goal: Explain abstract theory. Method: Two interactive line charts (Chart.js) simulating market curves. Interaction: A button applies a "subsidy," animating the demand curve shift and showing the elimination of deadweight loss. Justification: This dynamic visualization makes the theoretical cause-and-effect relationship intuitive.
+        2. Taiwan Policy: Report lists various subsidies. Goal: Present specific policy details. Method: Interactive cards for different vehicle types and a bar chart for market growth. Interaction: Clicking cards reveals subsidy details. The chart provides quick quantitative context. Justification: Breaks down dense info into organized, easily accessible chunks.
+        3. International Comparison: Report compares US, China, Europe. Goal: Facilitate cross-regional comparison. Method: Tabbed interface and a dynamic bar chart. Interaction: User selects a country tab and can then use a dropdown to compare different policy aspects (e.g., goals, subsidy types) on the chart. Justification: Allows for direct, user-controlled comparison, which is more powerful than a static table.
+        4. Effectiveness Evaluation: Report discusses efficiency, fairness, etc. Goal: Highlight key evaluation points. Method: A series of data-driven cards and a horizontal bar chart comparing the cost-effectiveness of different approaches (vehicle subsidy vs. infrastructure investment). Justification: Uses strong visual contrasts and key numbers to make evaluation arguments more impactful and memorable.
+        5. References: Goal: List user-provided sources. Method: An ordered list of clickable links to relevant articles and reports. Justification: Provides transparency for the information presented.
+        Library/Method: All charts use Chart.js on a <canvas> element. Diagrams and layouts are built with structured HTML and Tailwind CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #F8F7F4; color: #333333; }
+        .nav-link { transition: all 0.3s ease; border-bottom: 2px solid transparent; padding-top: 1rem; padding-bottom: 1rem; padding-left: 1rem; padding-right: 1rem; }
+        .nav-link.active, .nav-link:hover { color: #4A6C6F; border-bottom-color: #4A6C6F; }
+        .card { background-color: #FFFFFF; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+        .btn { background-color: #4A6C6F; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; transition: background-color 0.3s ease; }
+        .btn:hover { background-color: #3B5759; }
+        .tab-btn { background-color: #EAE7E0; color: #333333; }
+        .tab-btn.active { background-color: #4A6C6F; color: white; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 300px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .references-columns {
+            columns: 1;
+            -webkit-columns: 1;
+            -moz-columns: 1;
+            word-break: break-all;
+        }
+        @media (min-width: 768px) {
+            .references-columns {
+                columns: 2;
+                -webkit-columns: 2;
+                -moz-columns: 2;
+            }
+        }
+         @media (min-width: 1024px) {
+            .references-columns {
+                columns: 2; /* Kept at 2 for better readability with longer titles */
+                -webkit-columns: 2;
+                -moz-columns: 2;
+            }
+        }
+        .reference-link { color: #4A6C6F; text-decoration: underline; }
+        .reference-link:hover { color: #3B5759; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-[#4A6C6F] mb-2">電動車補助政策之外部性經濟分析</h1>
+            <p class="text-lg text-gray-600">一份將經濟學理論應用於現實世界政策的互動式探索</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center border-b-2 border-gray-200 mb-8">
+            <button class="nav-link active font-semibold" data-target="intro">介紹</button>
+            <button class="nav-link font-semibold" data-target="theory">理論核心</button>
+            <button class="nav-link font-semibold" data-target="taiwan">政策透視：台灣</button>
+            <button class="nav-link font-semibold" data-target="international">國際比較</button>
+            <button class="nav-link font-semibold" data-target="evaluation">效益評估</button>
+            <button class="nav-link font-semibold" data-target="references">引用文獻</button>
+        </nav>
+
+        <main>
+            <section id="intro" class="content-section">
+                <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold text-[#4A6C6F] mb-4">歡迎來到互動式分析儀表板</h2>
+                    <p class="mb-4 text-gray-700">本應用程式旨在將「電動車補助政策」的經濟學分析從靜態文字轉化為動態的互動體驗。在全球各國努力應對氣候變遷和空氣污染的背景下，電動車補貼已成為一項關鍵政策工具。然而，這些政策的成效、成本與公平性為何？</p>
+                    <p class="mb-4 text-gray-700">我們將運用經濟學第17章「外部性」的核心概念，剖析電動車市場為何會出現「市場失靈」，以及政府補貼如何作為一種矯正機制。透過這個平台，您可以：</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>在「<b>理論核心</b>」中，透過互動圖表親手操作供需曲線，理解正外部性與補貼的經濟邏輯。</li>
+                        <li>在「<b>政策透視：台灣</b>」中，深入了解台灣現行的電動汽機車補助方案及其市場影響。</li>
+                        <li>在「<b>國際比較</b>」中，一覽美國、中國、歐洲等主要經濟體的不同補貼策略與其背後考量。</li>
+                        <li>在「<b>效益評估</b>」中，權衡補貼政策的效率、公平性與潛在的市場挑戰。</li>
+                        <li>在「<b>引用文獻</b>」中，查看本分析報告實際參考的相關報導與資料。</li>
+                    </ul>
+                    <p class="mt-6 text-gray-700">請使用上方的導覽列來切換不同主題，開始您的探索之旅。</p>
+                </div>
+            </section>
+
+            <section id="theory" class="content-section hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold">理論核心：外部性與市場失靈</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto mt-2">在一個無政府干預的市場中，消費者只會考慮個人利益，而忽略了他們購買電動車為社會帶來的額外好處（如更乾淨的空氣），這就是「正外部性」。這會導致市場生產的電動車數量少於對整個社會最有效率的數量，形成「市場失靈」。</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold mb-2 text-center">圖一：市場失靈的發生</h3>
+                        <p class="text-sm text-gray-500 mb-4 text-center">由於邊際社會效益 (MSB) 大於邊際私人效益 (MB)，市場在 E_market 點達到均衡，產量為 Q_market，低於在 E_optimal 點的社會最適產量 Q_optimal。灰色區域代表因此產生的無謂損失 (Deadweight Loss)。</p>
+                        <div class="chart-container">
+                            <canvas id="marketFailureChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold mb-2 text-center">圖二：補貼作為解決方案</h3>
+                        <p class="text-sm text-gray-500 mb-4 text-center">理想的政府補貼（金額等於邊際外部效益 MEB）能將私人需求曲線 (MB) 向上提升，使其與社會效益曲線 (MSB) 重合。點擊下方按鈕，觀察補貼如何將市場推向最適產量並消除無謂損失。</p>
+                        <div class="chart-container">
+                            <canvas id="subsidyEffectChart"></canvas>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button id="applySubsidyBtn" class="btn">套用補貼</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="taiwan" class="content-section hidden">
+                 <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold">政策透視：台灣的電動運具支持架構</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto mt-2">台灣的電動車政策結合了中央與地方資源，提供多元的激勵措施，並特別側重於「汰舊換新」，以最大化環境效益。點擊下方卡片，查看不同車型的補助詳情。</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="card p-6">
+                        <h3 class="text-2xl font-bold text-center mb-4">🚗 電動汽車</h3>
+                        <ul class="space-y-3 text-gray-700">
+                            <li><b>貨物稅減免：</b>完稅價140萬以下全免，超過部分減半，至2025年底。</li>
+                            <li><b>使用牌照稅減免：</b>完全免徵，持續實施。</li>
+                            <li><b>汰舊換新補助：</b>淘汰10年以上舊車換購，可獲最高約1.7萬元的溫室氣體與空污減量獎勵。</li>
+                        </ul>
+                    </div>
+                    <div class="card p-6">
+                         <h3 class="text-2xl font-bold text-center mb-4">🛵 電動機車</h3>
+                        <ul class="space-y-3 text-gray-700">
+                            <li><b>經濟部新購補助：</b>重型/輕型補助7千元，使用國產電池芯再加3千元，至2026年底。</li>
+                            <li><b>環保署汰舊換新：</b>提供空污與溫室氣體減量獎勵，約1千元起。</li>
+                            <li><b>地方政府加碼：</b>各縣市提供不同額度補助，尤其針對汰換高污染的二行程機車。</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="card p-6 mt-8">
+                    <h3 class="text-xl font-bold mb-2 text-center">市場影響：電動小客車市佔率成長</h3>
+                     <p class="text-sm text-gray-500 mb-4 text-center">在政策推動下，台灣電動車市場顯著成長。2024年前10個月，純電動小客車新車市佔率已達8.2%。</p>
+                    <div class="chart-container h-64 sm:h-72">
+                        <canvas id="taiwanMarketShareChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="international" class="content-section hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold">國際比較：全球電動車補貼策略</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto mt-2">各國因其產業環境與政策目標不同，採取了多樣的補貼策略。點選下方頁籤查看各地區做法，並使用下拉選單在圖表中進行比較。</p>
+                </div>
+                <div class="flex justify-center space-x-2 mb-6">
+                    <button class="tab-btn active py-2 px-4 rounded-lg font-semibold" data-target="us">美國</button>
+                    <button class="tab-btn py-2 px-4 rounded-lg font-semibold" data-target="china">中國</button>
+                    <button class="tab-btn py-2 px-4 rounded-lg font-semibold" data-target="europe">歐洲</button>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="card p-6">
+                        <div id="us-content" class="country-content">
+                            <h3 class="text-xl font-bold mb-2">美國：《降低通膨法案》(IRA)</h3>
+                            <p class="text-gray-700">提供最高7,500美元稅收抵免，但附帶嚴格的「美國製造」條款，如北美組裝、電池與礦物來源限制。目標在扶植本土產業鏈，但也引發貿易摩擦。</p>
+                        </div>
+                        <div id="china-content" class="country-content hidden">
+                            <h3 class="text-xl font-bold mb-2">中國：從直接補貼到市場驅動</h3>
+                            <p class="text-gray-700">國家級購車補貼已於2022年底退場。現行支持轉向購置稅減免、汰舊換新計畫及非財政措施（如牌照發放）。市場已趨成熟，進入激烈價格競爭階段。</p>
+                        </div>
+                        <div id="europe-content" class="country-content hidden">
+                            <h3 class="text-xl font-bold mb-2">歐洲：多元化與條件化</h3>
+                            <p class="text-gray-700">各國策略迥異。<b>挪威</b>採長期全面免稅；<b>德國</b>突然終止補貼導致銷量趨緩；<b>法國</b>則採所得級距與「環境評分」制，兼顧環保與產業政策。</p>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold">策略比較</h3>
+                            <select id="comparison-metric" class="border rounded-md p-1">
+                                <option value="goal">主要目標</option>
+                                <option value="method">主要方式</option>
+                                <option value="status">當前狀態</option>
+                            </select>
+                        </div>
+                        <div class="chart-container h-80">
+                            <canvas id="internationalComparisonChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="evaluation" class="content-section hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold">效益評估：補貼政策的權衡取捨</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto mt-2">雖然補貼能有效刺激銷量，但其經濟效率、公平性與對市場的長期影響，皆需審慎評估。一個關鍵問題是：錢花得值得嗎？</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card p-6">
+                        <h3 class="font-bold text-lg mb-2">👍 有效性</h3>
+                        <p class="text-gray-700">補貼確實能刺激銷量、加速市場發展，並帶來實質的環境效益，如減少空氣污染與溫室氣體排放。</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="font-bold text-lg mb-2">👎 效率問題</h3>
+                        <p class="text-gray-700">納稅人成本高昂，且大部分補貼可能流向本就會購車的「邊際下消費者」，降低了政策的成本效益。</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="font-bold text-lg mb-2">⚖️ 公平性爭議</h3>
+                        <p class="text-gray-700">受益者多為能負擔高價新車的較高收入群體，可能產生財富由一般納稅人轉移至富裕階層的累退效果。</p>
+                    </div>
+                </div>
+                 <div class="card p-6 mt-8">
+                    <h3 class="text-xl font-bold mb-2 text-center">成本效益比較：兩種不同的花錢方式</h3>
+                    <p class="text-sm text-gray-500 mb-4 text-center">世界銀行研究指出，相較於直接補貼購車，投資充電基礎設施可能是促進電動車普及更具成本效益的方法。</p>
+                    <div class="chart-container h-64 sm:h-72">
+                        <canvas id="costEffectivenessChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="references" class="content-section hidden">
+                <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold text-[#4A6C6F] mb-4 text-center">引用文獻</h2>
+                    <p class="mb-6 text-gray-700 text-center">以下為本互動分析報告實際參考之相關報導與資料。完整的書目資訊與引用格式應於您的最終正式報告中詳細列出。</p>
+                    <ol class="list-decimal list-inside space-y-3 text-gray-600 references-columns">
+                        <li><a href="https://financialpost.com/pmn/business-pmn/tesla-has-1-2-billion-at-risk-in-trump-tax-bill" target="_blank" class="reference-link">Financial Post - Tesla Has $1.2 Billion at Risk in Trump Tax Bill</a></li>
+                        <li><a href="https://www.smat.org.tw/news/policy_detail/11" target="_blank" class="reference-link">台灣智慧移動產業協會 - 電動機車333 政策</a></li>
+                        <li><a href="https://www.car717.com.tw/car-news/electric-vehicle-subsidies-2024/" target="_blank" class="reference-link">小七車觀點 - 2024年電動車補助政策全面解析：綠能交通新紀元</a></li>
+                        <li><a href="https://www.carbonbrief.org/analysis-14bn-in-clean-energy-projects-have-been-cancelled-in-the-us-this-year/" target="_blank" class="reference-link">Carbon Brief - $14bn in clean energy projects have been cancelled in the US this year</a></li>
+                        <li><a href="https://www.ionex.com.tw/subsidy/" target="_blank" class="reference-link">Ionex 光陽電動車 - 政府補助</a></li>
+                        <li><a href="https://www.transportenvironment.org/discover/frances-eco-bonus-shows-how-we-can-promote-cleaner-made-in-europe-evs/" target="_blank" class="reference-link">Transport & Environment - France's eco-bonus shows how we can promote cleaner made-in-Europe EVs</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=5b6hHwQhX6A" target="_blank" class="reference-link">REUTERS (YouTube) - In Norway, nearly all new cars sold in 2024 were fully electric</a></li>
+                        <li><a href="https://www.politico.com/news/2023/09/27/house-gop-looks-to-gut-bidens-climate-incentives-in-megabill-proposal-00118513" target="_blank" class="reference-link">POLITICO - House GOP looks to gut Biden's climate incentives in megabill proposal</a></li>
+                        <li><a href="https://about.bnef.com/electric-vehicle-outlook/" target="_blank" class="reference-link">BloombergNEF - Electric Vehicle Outlook</a></li>
+                        <li><a href="https://www.iea.org/reports/global-ev-outlook-2025/trends-in-electric-car-markets" target="_blank" class="reference-link">IEA - Trends in electric car markets – Global EV Outlook 2025</a></li>
+                        <li><a href="https://www.iea.org/energy-system/transport/electric-vehicles" target="_blank" class="reference-link">IEA - Electric vehicles</a></li>
+                        <li><a href="https://www.cato.org/policy-analysis/corporate-welfare-federal-budget" target="_blank" class="reference-link">Cato Institute - Corporate Welfare in the Federal Budget</a></li>
+                        <li><a href="https://tw.news.yahoo.com/補助通-2025電動機車補助有哪些-補助金額多少-全台縣市加碼一次看-070100083.html" target="_blank" class="reference-link">Yahoo補助通 - 2025電動機車補助有哪些？補助金額多少？全台縣市加碼一次看</a></li>
+                        <li><a href="https://www.nber.org/papers/w30723" target="_blank" class="reference-link">NBER - Drive Down the Cost: Learning by Doing and Government Policies in the Global EV Battery Industry</a></li>
+                        <li><a href="https://news.stanford.edu/2023/11/15/study-finds-electric-vehicle-subsidies-help-climate-automakers-cost/" target="_blank" class="reference-link">Stanford News - Study finds electric vehicle subsidies help the climate and automakers – but at a cost</a></li>
+                        <li><a href="https://www.nber.org/papers/w31191" target="_blank" class="reference-link">NBER - The Effects of ``Buy American'': Electric Vehicles and the Inflation Reduction Act</a></li>
+                        <li><a href="https://nature.berkeley.edu/news/2023/08/evaluating-benefits-electric-vehicle-subsidies-under-inflation-reduction-act" target="_blank" class="reference-link">UC Berkeley Rausser College - Evaluating Benefits of Electric Vehicle Subsidies under the Inflation Reduction Act</a></li>
+                        <li><a href="https://www.iea.org/reports/global-ev-outlook-2021/policies-to-promote-electric-vehicle-deployment" target="_blank" class="reference-link">IEA - Policies to promote electric vehicle deployment – Global EV Outlook 2021</a></li>
+                        <li><a href="https://www.alternative-fuels-observatory.ec.europa.eu/general-information/incentives-and-legislation" target="_blank" class="reference-link">European Alternative Fuels Observatory - Incentives and Legislation</a></li>
+                        <li><a href="https://www.alternative-fuels-observatory.ec.europa.eu/countries/germany/incentives-legislation" target="_blank" class="reference-link">EAFO - Incentives & Legislation Germany</a></li>
+                        <li><a href="https://afdc.energy.gov/laws/electric-vehicles-for-consumers" target="_blank" class="reference-link">Alternative Fuels Data Center (AFDC) - Tax Credits for New Clean Vehicles Purchased in 2023 and After</a></li>
+                        <li><a href="https://cars.tvbs.com.tw/car-news/140005" target="_blank" class="reference-link">TVBS新聞網 - 電動車熱度退燒？經濟部統計台灣電動車近5年平均年增率破9成</a></li>
+                        <li><a href="https://www.gov.tw/News3_Content.aspx?n=2&s=721035" target="_blank" class="reference-link">我的E政府 - 帶您看廢棄物回收資訊，汽機車及節能家電獎勵補助辦法！</a></li>
+                        <li><a href="https://www.annualreviews.org/doi/abs/10.1146/annurev-resource-102122-102342" target="_blank" class="reference-link">Annual Reviews - Evaluating Electric Vehicle Policy Effectiveness and Equity</a></li>
+                        <li><a href="https://www.ey.gov.tw/Page/5B2FC62D288F4253/1706cf12-d8a8-45aa-9f14-4bca5680157d" target="_blank" class="reference-link">行政院 - 2030年客運車輛電動化推動計畫(112-115年)</a></li>
+                        <li><a href="https://www.businessweekly.com.tw/focus/blog/3014010" target="_blank" class="reference-link">商業周刊 - 2025電動車補助出爐！全台最新汰舊換新金額、申請流程、補助條件一次看</a></li>
+                        <li><a href="https://www.moea.gov.tw/Mns/populace/news/News.aspx?kind=2&menu_id=41&news_id=102631" target="_blank" class="reference-link">經濟部 - 智慧電動機車能源補充設施普及計畫</a></li>
+                        <li><a href="https://www.eea.europa.eu/en/topics/innotopic/electric-vehicles" target="_blank" class="reference-link">European Environment Agency - Electric vehicles</a></li>
+                        <li><a href="https://www.tbsnews.net/economy/electric-vehicle-gets-incentive-package-local-manufacturing-796258" target="_blank" class="reference-link">The Business Standard - Electric vehicle gets incentive package for local manufacturing</a></li>
+                        <li><a href="https://roo.cash/blog/motorcycle-subsidy/" target="_blank" class="reference-link">袋鼠金融 - 電動機車補助懶人包》2025 補助方案、補助金額及申請條件</a></li>
+                        <li><a href="https://www.iea.org/reports/global-ev-outlook-2024/outlook-for-emissions-reductions" target="_blank" class="reference-link">IEA - Outlook for emissions reductions – Global EV Outlook 2024</a></li>
+                        <li><a href="https://www.yahoo.com/news/tennessees-electric-vehicle-industry-could-100000784.html" target="_blank" class="reference-link">Yahoo News - Tennessee's electric vehicle industry could stall under 'Big Beautiful Bill' tax credit cuts</a></li>
+                        <li><a href="https://www.iea.org/reports/global-ev-outlook-2024/trends-in-electric-cars" target="_blank" class="reference-link">IEA - Trends in electric cars – Global EV Outlook 2024</a></li>
+                        <li><a href="https://www.researchgate.net/publication/369854999_How_Does_Government_Intervention_such_as_Subsidizing_Sustainable_Products_Promote_Green_Consumption_An_Integrative_Framework_and_Future_Research_Directions" target="_blank" class="reference-link">ResearchGate - (PDF) How Does Government Intervention, such as Subsidizing...</a></li>
+                        <li><a href="https://www.trade.gov/market-intelligence/germany-electric-vehicles-and-charging-infrastructure" target="_blank" class="reference-link">International Trade Administration - Germany Electric Vehicles and Charging Infrastructure</a></li>
+                        <li><a href="https://www.nber.org/system/files/working_papers/w31191/w31191.pdf" target="_blank" class="reference-link">NBER - The Effects of “Buy American”: Electric Vehicles and the Inflation... (PDF)</a></li>
+                        <li><a href="https://e-info.org.tw/node/235763" target="_blank" class="reference-link">環境資訊中心 - 鼓勵10年以上油車汰舊換新 明年底前換電動汽車至少可領1.5萬</a></li>
+                        <li><a href="https://documents1.worldbank.org/curated/en/213391650405984638/pdf/Costs-and-Benefits-of-Electric-Vehicle-Deployment-in-Low-and-Middle-Income-Countries.pdf" target="_blank" class="reference-link">World Bank Document - Costs and Benefits of Electric Vehicle Deployment... (PDF)</a></li>
+                    </ol>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const tabs = document.querySelectorAll('.tab-btn');
+            const countryContents = document.querySelectorAll('.country-content');
+            
+            let marketFailureChart, subsidyEffectChart, taiwanMarketShareChart, internationalComparisonChart, costEffectivenessChart;
+            let subsidyApplied = false;
+
+            const setActiveLink = (targetId) => {
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.dataset.target === targetId);
+                });
+                contentSections.forEach(section => {
+                    section.classList.toggle('hidden', section.id !== targetId);
+                });
+            };
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    const targetId = link.dataset.target;
+                    setActiveLink(targetId);
+                    
+                    if(targetId === 'theory' && !marketFailureChart) {
+                        createMarketFailureChart();
+                        createSubsidyEffectChart();
+                    }
+                    if(targetId === 'taiwan' && !taiwanMarketShareChart) {
+                        createTaiwanMarketShareChart();
+                    }
+                    if(targetId === 'international' && !internationalComparisonChart) {
+                        createInternationalComparisonChart();
+                    }
+                    if(targetId === 'evaluation' && !costEffectivenessChart) {
+                        createCostEffectivenessChart();
+                    }
+                });
+            });
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    countryContents.forEach(content => {
+                        content.classList.toggle('hidden', content.id !== `${tab.dataset.target}-content`);
+                    });
+                });
+            });
+
+            const commonChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: '數量 (Q)' }
+                    },
+                    y: {
+                        title: { display: true, text: '價格/成本/效益 (P)' },
+                        beginAtZero: true
+                    }
+                }
+            };
+            
+            function createMarketFailureChart() {
+                const ctx = document.getElementById('marketFailureChart').getContext('2d');
+                marketFailureChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['0', 'Q_market', 'Q_optimal', ''],
+                        datasets: [
+                            { label: '邊際私人效益 (MB = D)', data: [110, 80, 65, 50], borderColor: 'rgb(54, 162, 235)', tension: 0.1 },
+                            { label: '邊際社會效益 (MSB)', data: [130, 100, 85, 70], borderColor: 'rgb(75, 192, 192)', tension: 0.1 },
+                            { label: '邊際社會成本 (MSC = S)', data: [50, 80, 85, 90], borderColor: 'rgb(255, 99, 132)', tension: 0.1 },
+                            {
+                                label: '無謂損失 (DWL)',
+                                data: [{x:1, y:80}, {x:2, y:85}, {x:1, y:100}, {x:1, y:80}],
+                                backgroundColor: 'rgba(128, 128, 128, 0.2)',
+                                fill: true,
+                                showLine: false,
+                                pointRadius: 0
+                            }
+                        ]
+                    },
+                    options: commonChartOptions
+                });
+            }
+
+            function createSubsidyEffectChart() {
+                const ctx = document.getElementById('subsidyEffectChart').getContext('2d');
+                const initialData = {
+                    labels: ['0', 'Q_market', 'Q_optimal', ''],
+                    datasets: [
+                        { label: '邊際私人效益 (MB)', data: [110, 80, 65, 50], borderColor: 'rgb(54, 162, 235)', tension: 0.1, order: 2 },
+                        { label: '邊際社會效益 (MSB)', data: [130, 100, 85, 70], borderColor: 'rgb(75, 192, 192)', tension: 0.1, borderDash: [5, 5], order: 1 },
+                        { label: '邊際社會成本 (MSC)', data: [50, 80, 85, 90], borderColor: 'rgb(255, 99, 132)', tension: 0.1, order: 3 },
+                    ]
+                };
+                subsidyEffectChart = new Chart(ctx, { type: 'line', data: initialData, options: commonChartOptions });
+                
+                document.getElementById('applySubsidyBtn').addEventListener('click', () => {
+                    subsidyApplied = !subsidyApplied;
+                    const mbDataset = subsidyEffectChart.data.datasets.find(d => d.label.includes('MB') || d.label.includes('補貼'));
+                    if (subsidyApplied) {
+                        mbDataset.data = [130, 100, 85, 70];
+                        mbDataset.label = 'MB + 補貼';
+                        document.getElementById('applySubsidyBtn').textContent = '取消補貼';
+                    } else {
+                        mbDataset.data = [110, 80, 65, 50];
+                        mbDataset.label = '邊際私人效益 (MB)';
+                        document.getElementById('applySubsidyBtn').textContent = '套用補貼';
+                    }
+                    subsidyEffectChart.update();
+                });
+            }
+
+            function createTaiwanMarketShareChart() {
+                const ctx = document.getElementById('taiwanMarketShareChart').getContext('2d');
+                taiwanMarketShareChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['2020', '2021', '2022', '2023', '2024 (估)'],
+                        datasets: [{
+                            label: '純電動小客車市佔率 (%)',
+                            data: [2.1, 4.0, 5.8, 7.5, 8.2],
+                            backgroundColor: 'rgba(74, 108, 111, 0.6)',
+                            borderColor: 'rgba(74, 108, 111, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        scales: { x: { beginAtZero: true, max: 10, title: { display: true, text: '市佔率 (%)' } } },
+                        plugins: { legend: { display: false }, tooltip: {
+                            callbacks: {
+                                label: (context) => `市佔率: ${context.parsed.x}%`
+                            }
+                        }}
+                    }
+                });
+            }
+            
+            const comparisonData = {
+                goal: {
+                    labels: ['美國', '中國', '歐洲 (法國)'],
+                    values: [8, 9, 7],
+                    tooltips: ['扶植本土產業', '市場成熟化', '產業與環境兼顧']
+                },
+                method: {
+                    labels: ['美國', '中國', '歐洲 (挪威)'],
+                    values: [8, 6, 9],
+                    tooltips: ['稅收抵免', '稅負減免/汰舊換新', '全面性免稅']
+                },
+                status: {
+                    labels: ['美國', '中國', '歐洲 (德國)'],
+                    values: [9, 5, 3],
+                    tooltips: ['實施中', '購車補貼已退場', '購車補貼已終止']
+                }
+            };
+            
+            function createInternationalComparisonChart() {
+                const ctx = document.getElementById('internationalComparisonChart').getContext('2d');
+                internationalComparisonChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: comparisonData.goal.labels,
+                        datasets: [{
+                            label: '策略強度/重點 (示意)',
+                            data: comparisonData.goal.values,
+                            backgroundColor: ['#B91C1C', '#1D4ED8', '#047857'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        scales: { x: { beginAtZero: true, max: 10, display: false }, y: { grid: { display: false }} },
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const metric = document.getElementById('comparison-metric').value;
+                                        return comparisonData[metric].tooltips[context.dataIndex];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                document.getElementById('comparison-metric').addEventListener('change', (e) => {
+                    const metric = e.target.value;
+                    const data = comparisonData[metric];
+                    internationalComparisonChart.data.labels = data.labels;
+                    internationalComparisonChart.data.datasets[0].data = data.values;
+                    internationalComparisonChart.update();
+                });
+            }
+
+            function createCostEffectivenessChart() {
+                const ctx = document.getElementById('costEffectivenessChart').getContext('2d');
+                costEffectivenessChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['直接購車補貼', '投資充電基礎設施'],
+                        datasets: [{
+                            label: '誘導每輛電動車銷售的政府平均支出 (美元)',
+                            data: [10872, 1587],
+                            backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)'],
+                            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        scales: { x: { beginAtZero: true, ticks: { callback: (value) => `$${value}` }, title: {display: true, text: '政府平均支出 (美元)'} } },
+                        plugins: { legend: { display: false }, tooltip: {
+                             callbacks: {
+                                label: (context) => `平均支出: $${context.parsed.x}`
+                            }
+                        } }
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
